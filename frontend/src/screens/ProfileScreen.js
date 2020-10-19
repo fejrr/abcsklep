@@ -4,6 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import ShowDate from '../components/ShowDate'
 import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import { listMyOrders } from '../actions/orderActions'
 
@@ -68,7 +69,7 @@ const ProfileScreen = ({ location, history }) => {
                   <Form.Label>Imię i nazwisko</Form.Label>
                   <Form.Control
                     type='name'
-                    placeholder='Enter name'
+                    placeholder='Imię i nazwisko'
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   ></Form.Control>
@@ -78,7 +79,7 @@ const ProfileScreen = ({ location, history }) => {
                   <Form.Label>Email</Form.Label>
                   <Form.Control
                     type='email'
-                    placeholder='Enter email'
+                    placeholder='Email'
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   ></Form.Control>
@@ -88,7 +89,7 @@ const ProfileScreen = ({ location, history }) => {
                   <Form.Label>Hasło</Form.Label>
                   <Form.Control
                     type='password'
-                    placeholder='Enter password'
+                    placeholder='Hasło'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   ></Form.Control>
@@ -98,7 +99,7 @@ const ProfileScreen = ({ location, history }) => {
                   <Form.Label>Potwierdź hasło</Form.Label>
                   <Form.Control
                     type='password'
-                    placeholder='Confirm password'
+                    placeholder='Potwierdź hasło'
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   ></Form.Control>
@@ -132,18 +133,18 @@ const ProfileScreen = ({ location, history }) => {
                   {orders.map((order) => (
                     <tr key={order._id}>
                       <td>{order._id}</td>
-                      <td>{order.createdAt.substring(0, 10)}</td>
+                      <td><ShowDate time={order.createdAt} format='lll:ss' /></td>
                       <td>{order.totalPrice}</td>
                       <td>
                         {order.isPaid ? (
-                          order.paidAt.substring(0, 10)
+                          <ShowDate time={order.paidAt} format='lll:ss' />
                         ) : (
                             <i className='fas fa-times' style={{ color: 'red' }}></i>
                           )}
                       </td>
                       <td>
                         {order.isDelivered ? (
-                          order.deliveredAt.substring(0, 10)
+                          <ShowDate time={order.deliveredAt} format='lll:ss' />
                         ) : (
                             <i className='fas fa-times' style={{ color: 'red' }}></i>
                           )}

@@ -4,6 +4,7 @@ import { Table, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import ShowDate from '../components/ShowDate'
 import { listOrders } from '../actions/orderActions'
 
 const OrderListScreen = ({ history }) => {
@@ -39,7 +40,7 @@ const OrderListScreen = ({ history }) => {
                   <th>DATA</th>
                   <th>SUMA</th>
                   <th>ZAPŁACONO</th>
-                  <th>DOSTARCZONO</th>
+                  <th>WYSŁANO</th>
                   <th></th>
                 </tr>
               </thead>
@@ -51,13 +52,13 @@ const OrderListScreen = ({ history }) => {
                     <td>{order.createdAt.substring(0, 10)}</td>
                     <td>${order.totalPrice}</td>
                     {order.isPaid ? (
-                      <td className='bg-success'>{order.paidAt.substring(0, 10)}</td>
+                      <td className='bg-success'><ShowDate time={order.paidAt} format='lll:ss' /></td>
                     ) : (
                         <td><i className='fas fa-times' style={{ color: 'red' }}></i></td>
                       )}
                     <td>
                       {order.isDelivered ? (
-                        order.deliveredAt.substring(0, 10)
+                        <ShowDate time={order.deliveredAt} format='lll:ss' />
                       ) : (
                           <i className='fas fa-times' style={{ color: 'red' }}></i>
                         )}

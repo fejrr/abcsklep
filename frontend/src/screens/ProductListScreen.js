@@ -97,6 +97,7 @@ const ProductListScreen = ({ history, match }) => {
                   <tr>
                     <th>ID</th>
                     <th>NAZWA</th>
+                    <th>STAN</th>
                     <th>CENA</th>
                     <th>KATEGORIA</th>
                     <th>MARKA</th>
@@ -108,6 +109,13 @@ const ProductListScreen = ({ history, match }) => {
                     <tr key={product._id}>
                       <td>{product._id}</td>
                       <td>{product.name}</td>
+                      {/*  */}
+                      {product.countInStock > 10 ?
+                        <td className='bg-success'>{product.countInStock}</td> :
+                        product.countInStock > 0 ?
+                          <td className='badge-warning'>{product.countInStock}</td> :
+                          <td className='bg-danger'>{product.countInStock}</td>}
+                      {/*  */}
                       <td>{product.price} zł</td>
                       <td>{product.category}</td>
                       <td>{product.brand}</td>

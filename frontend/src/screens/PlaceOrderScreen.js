@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
 import { createOrder } from '../actions/orderActions'
+import { CART_RESET } from '../constants/cartConstants'
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch()
@@ -20,11 +21,9 @@ const PlaceOrderScreen = ({ history }) => {
     cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   )
   cart.shippingPrice = addDecimals(cart.itemsPrice > 100 ? 0 : 100)
-  cart.taxPrice = addDecimals(Number((0.15 * cart.itemsPrice).toFixed(2)))
   cart.totalPrice = (
     Number(cart.itemsPrice) +
-    Number(cart.shippingPrice) +
-    Number(cart.taxPrice)
+    Number(cart.shippingPrice)
   ).toFixed(2)
 
   const orderCreate = useSelector((state) => state.orderCreate)
@@ -45,10 +44,10 @@ const PlaceOrderScreen = ({ history }) => {
         paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
-        taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
       })
     )
+    dispatch({ type: CART_RESET })
   }
 
   return (
@@ -62,8 +61,7 @@ const PlaceOrderScreen = ({ history }) => {
               <p>
                 <strong>Adres:</strong>
                 {cart.shippingAddress.address}, {cart.shippingAddress.city}{' '}
-                {cart.shippingAddress.postalCode},{' '}
-                {cart.shippingAddress.country}
+                {cart.shippingAddress.postalCode}
               </p>
             </ListGroup.Item>
 
@@ -96,7 +94,7 @@ const PlaceOrderScreen = ({ history }) => {
                             </Link>
                           </Col>
                           <Col md={4}>
-                            {item.qty} x ${item.price} = ${item.qty * item.price}
+                            {item.qty} x {item.price} zł = {item.qty * item.price} zł
                           </Col>
                         </Row>
                       </ListGroup.Item>
@@ -110,30 +108,24 @@ const PlaceOrderScreen = ({ history }) => {
           <Card>
             <ListGroup variant='flush'>
               <ListGroup.Item>
-                <h2>Podsumowanie</h2>
+                <h2>Podsumowanie zamówienia</h2>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Przedmioty</Col>
-                  <Col>${cart.itemsPrice}</Col>
+                  <Col>Wartość przedmiotów</Col>
+                  <Col>{cart.itemsPrice} zł</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Dostawa</Col>
-                  <Col>${cart.shippingPrice}</Col>
+                  <Col>{cart.shippingPrice > 0 ? ` ${cart.shippingPrice} zł` : 'GRATIS'}</Col>
                 </Row>
               </ListGroup.Item>
-              {/* <ListGroup.Item>
-                <Row>
-                  <Col>Tax</Col>
-                  <Col>${cart.taxPrice}</Col>
-                </Row>
-              </ListGroup.Item> */}
               <ListGroup.Item>
                 <Row>
                   <Col>Suma</Col>
-                  <Col>${cart.totalPrice}</Col>
+                  <Col>{cart.totalPrice} zł</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>

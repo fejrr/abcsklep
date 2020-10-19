@@ -6,6 +6,7 @@ import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import ShowDate from '../components/ShowDate'
 import {
   getOrderDetails,
   payOrder,
@@ -92,7 +93,7 @@ const OrderScreen = ({ match, history }) => {
   ) : (
         <>
           {userInfo && userInfo.isAdmin && (
-            <Link to='/admin/ordererlist' className='btn btn-light my-3'>
+            <Link to='/admin/orderlist' className='btn btn-light my-3'>
               Wróć
             </Link>
           )}
@@ -112,12 +113,11 @@ const OrderScreen = ({ match, history }) => {
                   <p>
                     <strong>Adres dostawy: </strong>
                     {order.shippingAddress.address}, {order.shippingAddress.city}{' '}
-                    {order.shippingAddress.postalCode},{' '}
-                    {order.shippingAddress.country}
+                    {order.shippingAddress.postalCode}
                   </p>
                   {order.isDelivered ? (
                     <Message variant='success'>
-                      Wysłane {order.deliveredAt}
+                      Wysłane <ShowDate time={order.deliveredAt} format='lll:ss' />
                     </Message>
                   ) : (
                       <Message variant='danger'>Nie wysłano</Message>
@@ -131,7 +131,7 @@ const OrderScreen = ({ match, history }) => {
                     {order.paymentMethod}
                   </p>
                   {order.isPaid ? (
-                    <Message variant='success'>Zapłacono {order.paidAt}</Message>
+                    <Message variant='success'>Zapłacono <ShowDate time={order.paidAt} format='lll:ss' /></Message>
                   ) : (
                       <Message variant='danger'>Nie zapłacono</Message>
                     )}
@@ -188,12 +188,6 @@ const OrderScreen = ({ match, history }) => {
                       <Col>{order.shippingPrice ? `${order.shippingPrice} zł` : 'GRATIS'}</Col>
                     </Row>
                   </ListGroup.Item>
-                  {/* <ListGroup.Item>
-                    <Row>
-                      <Col>Tax</Col>
-                      <Col>${order.taxPrice}</Col>
-                    </Row>
-                  </ListGroup.Item> */}
                   <ListGroup.Item>
                     <Row>
                       <Col>Do zapłaty</Col>
